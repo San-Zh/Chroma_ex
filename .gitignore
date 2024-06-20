@@ -1,0 +1,7 @@
+./chroma_ex
+./*.o
+./chroma_org.cc
+./dat
+./XMLDAT
+.vscode
+.vscode/*

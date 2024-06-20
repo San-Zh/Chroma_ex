@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<chroma>
+  <annotation>
+    Write some QIO objects
+</annotation>
+  <Param>
+    <InlineMeasurements>
+
+      <elem>
+        <annotation>
+          Make a gaussian prop
+        </annotation>
+        <Name>GAUSSIAN_INIT_NAMED_OBJECT</Name>
+        <Frequency>1</Frequency>
+        <NamedObject>
+          <object_id>prop_0</object_id>
+          <object_type>LatticePropagator</object_type>
+        </NamedObject>
+      </elem>
+
+      <elem>
+        <Name>WRITE_PART_PROP</Name>
+        <Frequency>1</Frequency>
+        <sink_coord>0 0 0 1</sink_coord>
+        <gamma_id>5</gamma_id>
+        <filename>./data</filename>
+        <NamedObject>
+          <prop_id>prop_0</prop_id>
+        </NamedObject>
+      </elem>
+
+    </InlineMeasurements>
+    <nrow>8 8 8 16</nrow>
+  </Param>
+  <Cfg>
+    <cfg_type>WEAK_FIELD</cfg_type>
+    <cfg_file>dummy</cfg_file>
+  </Cfg>
+</chroma>
