@@ -10,10 +10,12 @@ AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 
 # 连续赋值时，对齐所有等号, true AcrossComments
-AlignConsecutiveAssignments: AcrossComments
+# AlignConsecutiveAssignments: AcrossComments
+AlignConsecutiveAssignments: true
 
 # 连续声明时，对齐所有声明的变量名  # true AcrossComments
-AlignConsecutiveDeclarations: AcrossComments 
+# AlignConsecutiveDeclarations: AcrossComments 
+AlignConsecutiveDeclarations: true
 
 # 连续宏定义对齐
 AlignConsecutiveMacros: true
@@ -35,11 +37,11 @@ AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 
 # 允许短的块放在同一行, 根据情况，while (true) { continue;}可以放在单行上,可以是以下值：Never，Empty，Always。
-AllowShortBlocksOnASingleLine: true
+AllowShortBlocksOnASingleLine: Always
 # 允许短的case标签放在同一行
 AllowShortCaseLabelsOnASingleLine: false
 # 允许短枚举在单行上
-AllowShortEnumsOnASingleLine: true
+# AllowShortEnumsOnASingleLine: true
 # 允许短的函数放在同一行: None, InlineOnly(定义在类中), Empty(空函数), Inline(定义在类中，空函数), All
 AllowShortFunctionsOnASingleLine: All
 # 允许短的if语句保持在同一行, Never，WithoutElse，OnlyFirstIf，AllIfsAndElse
@@ -58,7 +60,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 
 # 属性宏. 应该被解释为属性/限定符而不是标识符的字符串向量。这对于语言扩展或静态分析器注释非常有用
-AttributeMacros: ['__capability', '__output', '__ununsed']
+# AttributeMacros: ['__capability', '__output', '__ununsed']
 
 BinPackArguments: true
 BinPackParameters: true

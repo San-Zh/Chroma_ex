@@ -29,9 +29,10 @@ namespace Chroma
 
         unsigned long frequency;
         std::string   filename;
+        // std::string   SourceType;
         // multi1d<int>  srce_coord;
-        multi1d<int>  sink_coord;
-        int           gamma_id;
+        multi1d<int> sink_coord;
+        multi1d<int> gamma_id;
 
         struct NamedObject_t
         {

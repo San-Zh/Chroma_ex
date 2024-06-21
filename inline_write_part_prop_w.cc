@@ -57,10 +57,14 @@ namespace Chroma
                 frequency = 1;
             }
 
+            if (paramtop.count("gamma_id") == 1) {
+                read(paramtop, "gamma_id", gamma_id);
+            } else {
+                gamma_id.resize(0);
+            }
+
             read(paramtop, "filename", filename);
-            // read(paramtop, "srce_coord", srce_coord);
             read(paramtop, "sink_coord", sink_coord);
-            read(paramtop, "gamma_id", gamma_id);
             read(paramtop, "NamedObject", named_obj);
 
             if (paramtop.count("xml_file") != 0) read(paramtop, "xml_file", xml_file);
@@ -73,9 +77,8 @@ namespace Chroma
 
     void InlineWritePartPropParams::writeXML(XMLWriter &xml_out, const std::string &path) {
         push(xml_out, path);
+        if (gamma_id.size() > 0) { write(xml_out, "gamma_id", gamma_id); }
         write(xml_out, "filename", filename);
-        // write(xml_out, "srce_coord", srce_coord);
-        write(xml_out, "gamma_id", gamma_id);
         write(xml_out, "sink_coord", sink_coord);
         write(xml_out, "NamedObject", named_obj);
         pop(xml_out);
@@ -96,36 +99,64 @@ namespace Chroma
 
     void InlineWritePartProp::func(unsigned long update_no, XMLWriter &xml_out) {
         START_CODE();
-        QDPIO::cout << InlineWritePartPropEnv::name << ": save part propagator data" << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": save SpinColorMatrix of propagator " << params.named_obj.prop_id << std::endl;
         StopWatch snoop;
         snoop.reset();
         snoop.start();
 
-        // QDPIO::cout << InlineWritePartPropEnv::name << ": get propagator field" << std::endl;
-        LatticePropagator prop = TheNamedObjMap::Instance().getData<LatticePropagator>(params.named_obj.prop_id);
+        LatticePropagator lattProp = TheNamedObjMap::Instance().getData<LatticePropagator>(params.named_obj.prop_id);
+        // LatticeComplex    lattCorr = trace(Gamma(params.gamma_id) * lattProp);
+
+        int linearIdx = Layout::linearSiteIndex(params.sink_coord);
+        QDPIO::cout << InlineWritePartPropEnv::name << ": sink_coord      = " << params.sink_coord[0] << " " << params.sink_coord[1] << " "
+                    << params.sink_coord[2] << " " << params.sink_coord[3] << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": linearSiteIndex = " << linearIdx << std::endl;
 
         if (Layout::primaryNode()) {
-            auto  Msc   = prop.elem(Layout::linearSiteIndex(params.sink_coord));
-            auto  Corr  = trace(Gamma(params.gamma_id) * Msc);
-            REAL *p_Msc = &Msc.elem(0, 0).elem(0, 0).real();
-            // ColorMatrixSpinMatrix Msc    = prop.elem(linidx);
-            // SpinColorMatrx        Msc    = prop.elem(linidx);
+            auto &Msc   = lattProp.elem(linearIdx);
+            auto *p_Msc = &Msc.elem(0, 0).elem(0, 0).real();
+            // auto *p_Msc = &lattProp.elem(linearIdx).elem(0, 0).elem(0, 0).real(); ///< REAL for QDPXX, QDP::Word<REAL> for QDP-JITs
 
-            QDPIO::cout << InlineWritePartPropEnv::name << ": sink_coord = " << params.sink_coord[0] << " " << params.sink_coord[1] << " "
-                        << params.sink_coord[2] << " " << params.sink_coord[3] << std::endl;
-            QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Gamma(" << params.gamma_id << ") * Prop(sink_coord)) = " << Corr << std::endl;
-            QDPIO::cout << InlineWritePartPropEnv::name << ": write binary data " << params.named_obj.prop_id
-                        << ".elem(Layout::linearSiteIndex(params.sink_coord)) to file " << params.filename << std::endl;
-
+#ifdef WRITE_DEBUG
+            QDPIO::cout << "(SpinColorMatrix) Msc:" << std::endl;
+            for (int s0 = 0; s0 < Ns; s0++) {
+                for (int s1 = 0; s1 < Ns; s1++) {
+                    QDPIO::cout << " (ColorMatrix) Msc.elem(" << s0 << "," << s1 << ") =" << std::endl;
+                    for (int c0 = 0; c0 < Nc; c0++) {
+                        for (int c1 = 0; c1 < Nc; c1++) { QDPIO::cout << "  " << Msc.elem(s0, s1).elem(c0, c1); };
+                        QDPIO::cout << std::endl;
+                    }
+                    QDPIO::cout << std::endl;
+                }
+            }
+            QDPIO::cout << std::endl;
+#endif
             FILE *fp = fopen(params.filename.c_str(), "w");
             fwrite(p_Msc, sizeof(REAL), Ns * Nc * Ns * Nc * 2, fp);
             fclose(fp);
             fp = NULL;
+            QDPIO::cout << InlineWritePartPropEnv::name << ": write to file " << params.filename << std::endl;
+
+            auto CorrUNIT = trace(Msc);
+            QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Msc) = " << CorrUNIT << std::endl;
+            if (params.gamma_id.size() > 0) {
+                multi1d<decltype(CorrUNIT)> Corr;
+                Corr.resize(params.gamma_id.size());
+                for (int i = 0; i < Corr.size(); i++) { Corr[i] = trace(Gamma(params.gamma_id[i]) * Msc); }
+                QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Gamma * Msc) for gamma_id = ";
+                for (int i = 0; i < params.gamma_id.size(); i++) { QDPIO::cout << params.gamma_id[i] << " "; }
+                QDPIO::cout << std::endl;
+                QDPIO::cout << InlineWritePartPropEnv::name << ": traceValues = ";
+                for (int i = 0; i < Corr.size(); i++) { QDPIO::cout << Corr[i] << " "; }
+                QDPIO::cout << std::endl;
+            } else {
+            }
         }
+        // QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Gamma(" << params.gamma_id << ") * Msc) = " << lattCorr.elem(linearIdx) << std::endl;
 
         snoop.stop();
         QDPIO::cout << InlineWritePartPropEnv::name << ": total time = " << snoop.getTimeInSeconds() << " secs" << std::endl;
-        // QDPIO::cout << InlineWritePartPropEnv::name << ": ran successfully" << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": ran successfully" << std::endl;
         END_CODE();
     }
 };

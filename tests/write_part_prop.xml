@@ -21,13 +21,14 @@
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
-        <sink_coord>0 0 0 1</sink_coord>
-        <gamma_id>5</gamma_id>
-        <filename>./data</filename>
+        <sink_coord>6 3 2 2</sink_coord>
+        <gamma_id>1 5</gamma_id>
+        <filename>./SpinColorMatrix_sink_6_3_2_2.dat</filename>
         <NamedObject>
-          <prop_id>prop_0</prop_id>
+          <prop_id>prop_pt_src</prop_id>
         </NamedObject>
       </elem>
+
 
     </InlineMeasurements>
     <nrow>8 8 8 16</nrow>
