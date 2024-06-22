@@ -23,7 +23,8 @@ echo -e "SLURM_NODELIST:\n ${SLURM_NODELIST}\n"
 # source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_quda_qdpjit/version-dtk23.04/gcc-7.3.1/env.sh
 # EXENAME=chroma
 
-source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_ex/env.sh
+source ${CHROMA_PATH}/locl/bin/env.sh
+
 EXENAME=chroma_ex
 
 # EXENAME=/public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_ex/chroma_ex
