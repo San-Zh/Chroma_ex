@@ -13,7 +13,7 @@
         <Name>GAUSSIAN_INIT_NAMED_OBJECT</Name>
         <Frequency>1</Frequency>
         <NamedObject>
-          <object_id>prop_0</object_id>
+          <object_id>prop_pt_src</object_id>
           <object_type>LatticePropagator</object_type>
         </NamedObject>
       </elem>
@@ -21,9 +21,19 @@
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
+        <sink_coord>4 6 7 0</sink_coord>
+        <file_name>./data/SpinColorMatrix_sink_4_6_7_0.dat</file_name>
+        <NamedObject>
+          <prop_id>prop_pt_src</prop_id>
+        </NamedObject>
+      </elem>
+
+      <elem>
+        <Name>WRITE_PART_PROP</Name>
+        <Frequency>1</Frequency>
         <sink_coord>6 3 2 2</sink_coord>
-        <gamma_id>1 5</gamma_id>
-        <filename>./SpinColorMatrix_sink_6_3_2_2.dat</filename>
+        <gamma_id>1 2 4 8 15</gamma_id>
+        <file_name>./SpinColorMatrix_sink_6_3_2_2.dat</file_name>
         <NamedObject>
           <prop_id>prop_pt_src</prop_id>
         </NamedObject>

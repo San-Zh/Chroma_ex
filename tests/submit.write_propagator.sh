@@ -18,29 +18,25 @@ date
 echo ""
 echo -e "SLURM_NODELIST:\n ${SLURM_NODELIST}\n"
 
-# source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_qdpjit/version-dtk23.04/env.sh
 # source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_cpu/gcc-7.3.1/double/env.sh
-# source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_quda_qdpjit/version-dtk23.04/gcc-7.3.1/env.sh
+# source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_qdpjit/version-dtk23.04/env.sh
+source /public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_quda_qdpjit/version-dtk23.04/gcc-7.3.1/env.sh
+
 # EXENAME=chroma
+EXENAME=chroma
 
-source ${CHROMA_PATH}/locl/bin/env.sh
-
-EXENAME=chroma_ex
-
-# EXENAME=/public/home/zhangkl01/public/software/soft.lqcd/soft.usqcd/chroma_ex/chroma_ex
 
 echo "Params:"
 
 nx=1
 ny=1
-nz=2
-nt=2
+nz=1
+nt=4
 
-# IniputXmlFile="./write_propagator.ini.xml"
-# IniputXmlFile="./write_gauge.ini.xml"
 # IniputXmlFile="./write_part_prop.xml"
 # IniputXmlFile="./write_prop_spinColorMatrix.4050t0.ini.xml"
-IniputXmlFile="./write_qdpjit_spinColorMatrix.4050t0.ini.xml"
+# IniputXmlFile="./write_qdpjit_spinColorMatrix.4050t0.ini.xml"
+IniputXmlFile="./write_quda_spinColorMatrix.4050t0.ini.xml"
 OutputXmfFile=
 
 GeomArray="$nx $ny $nz $nt"

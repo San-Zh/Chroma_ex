@@ -17,7 +17,7 @@
               -->
             <SourceType>POINT_SOURCE</SourceType>
             <j_decay>3</j_decay>
-            <t_srce>6 3 8 2</t_srce>
+            <t_srce>12 1 3 1</t_srce>
             <SmearingParam>
               <wvf_kind>NONE</wvf_kind>
               <wvf_param>0</wvf_param>
@@ -71,7 +71,7 @@
                 <nu>1</nu>
               </AnisoParam>
             </CloverParams>
-            <RsdTarget>1.0e-14</RsdTarget>
+            <RsdTarget>1.0e-7</RsdTarget>
             <Delta>1.0e-1</Delta>
             <!--Pipeline>4</Pipeline-->
             <Pipeline>0</Pipeline>
@@ -103,44 +103,231 @@
         </NamedObject>
       </elem>
 
-      <!-- <elem>
-        <annotation>
-          Write the named object
-        </annotation>
-        <Name>QIO_WRITE_NAMED_OBJECT</Name>
-        <Frequency>1</Frequency>
-        <NamedObject>
-          <object_id>prop_pt_src</object_id>
-          <object_type>LatticePropagatorD</object_type>
-        </NamedObject>
-        <File>
-          <file_name>/public/home/zhangkl01/Propagator/prop_6382.lime</file_name>
-          <file_volfmt>SINGLEFILE</file_volfmt>
-          <parallel_io>false</parallel_io>
-        </File>
-      </elem> -->
-
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
-        <sink_coord>6 3 8 2</sink_coord>
-        <gamma_id>0 1 2 3 4 5</gamma_id>
-        <file_name>./data/SpinColorMatrix_sink_6_3_8_2.dat</file_name>
+        <sink_coord>12 1 3 1</sink_coord>
+        <gamma_id>1 2 4 8 15</gamma_id>
+        <file_name>./data/SpinColorMatrix_sink.dat</file_name>
         <NamedObject>
           <prop_id>prop_pt_src</prop_id>
+        </NamedObject>
+      </elem>
+
+
+      <elem>
+        <Name>MAKE_SOURCE</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>6</version>
+          <Source>
+            <version>1</version>
+            <SourceType>POINT_SOURCE</SourceType>
+            <j_decay>3</j_decay>
+            <t_srce>2	0	15	3</t_srce>
+            <SmearingParam>
+              <wvf_kind>NONE</wvf_kind>
+              <wvf_param>0</wvf_param>
+              <wvfIntPar>0</wvfIntPar>
+              <no_smear_dir>3</no_smear_dir>
+              <Verbose>false</Verbose>
+              <checkP>false</checkP>
+            </SmearingParam>
+          </Source>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+          <source_id>pt_src1</source_id>
+        </NamedObject>
+      </elem>
+      
+      <elem>
+        <Name>PROPAGATOR</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>10</version>
+          <quarkSpinType>FULL</quarkSpinType>
+          <obsvP>true</obsvP>
+          <numRetries>1</numRetries>
+          <FermionAction>
+            <FermAct>SEOPREC_CLOVER</FermAct>
+            <!-- <FermAct>CLOVER</FermAct> -->
+            <Mass>0.4479</Mass>
+            <clovCoeff>1.1609202226</clovCoeff>
+            <FermState>
+              <Name>STOUT_FERM_STATE</Name>
+              <rho>0.125</rho>
+              <n_smear>1</n_smear>
+              <orthog_dir>-1</orthog_dir>
+              <FermionBC>
+                <FermBC>SIMPLE_FERMBC</FermBC>
+                <boundary>1 1 1 -1</boundary>
+              </FermionBC>
+            </FermState>
+          </FermionAction>
+
+          <InvertParam>
+            <invType>QUDA_CLOVER_INVERTER</invType>
+            <CloverParams>
+              <Mass>0.4479</Mass>
+              <clovCoeff>1.1609202226</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+            </CloverParams>
+            <RsdTarget>1.0e-7</RsdTarget>
+            <Delta>1.0e-1</Delta>
+            <!--Pipeline>4</Pipeline-->
+            <Pipeline>0</Pipeline>
+            <MaxIter>1000</MaxIter>
+            <SolverType>BICGSTAB</SolverType>
+            <!--SolverType>GCR</SolverType-->
+            <NKrylov>12</NKrylov>
+            <InvTypePrecondition>CA_GCR</InvTypePrecondition>
+            <PrecPrecondition>HALF</PrecPrecondition>
+            <MaxIterPrecondition>20</MaxIterPrecondition>
+            <RsdToleranceFactor>100.0</RsdToleranceFactor>
+            <AntiPeriodicT>true</AntiPeriodicT>
+            <Verbose>false</Verbose>
+            <AsymmetricLinop>false</AsymmetricLinop>
+            <CudaReconstruct>RECONS_12</CudaReconstruct>
+            <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+            <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+            <AxialGaugeFix>false</AxialGaugeFix>
+            <AutotuneDslash>true</AutotuneDslash>
+            <SolutionCheckP>true</SolutionCheckP>
+            <!--SubspaceID>subspace_2416</SubspaceID>
+            <ThresholdCount>500</ThresholdCount-->
+          </InvertParam>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+          <source_id>pt_src1</source_id>
+          <prop_id>prop_pt_src1</prop_id>
         </NamedObject>
       </elem>
 
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
-        <sink_coord>4 6 7 0</sink_coord>
-        <file_name>./data/SpinColorMatrix_sink_4_6_7_0.dat</file_name>
+        <sink_coord>2	0	15	3</sink_coord>
+        <gamma_id>1 2 4 8 15</gamma_id>
+        <file_name>./data/SpinColorMatrix_sink.dat</file_name>
         <NamedObject>
-          <prop_id>prop_pt_src</prop_id>
+          <prop_id>prop_pt_src1</prop_id>
         </NamedObject>
       </elem>
 
+      
+      <elem>
+        <Name>MAKE_SOURCE</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>6</version>
+          <Source>
+            <version>1</version>
+            <SourceType>POINT_SOURCE</SourceType>
+            <j_decay>3</j_decay>
+            <t_srce>2	13	3	34</t_srce>
+            <SmearingParam>
+              <wvf_kind>NONE</wvf_kind>
+              <wvf_param>0</wvf_param>
+              <wvfIntPar>0</wvfIntPar>
+              <no_smear_dir>3</no_smear_dir>
+              <Verbose>false</Verbose>
+              <checkP>false</checkP>
+            </SmearingParam>
+          </Source>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+          <source_id>pt_src2</source_id>
+        </NamedObject>
+      </elem>
+
+      
+      <elem>
+        <Name>PROPAGATOR</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>10</version>
+          <quarkSpinType>FULL</quarkSpinType>
+          <obsvP>true</obsvP>
+          <numRetries>1</numRetries>
+          <FermionAction>
+            <FermAct>SEOPREC_CLOVER</FermAct>
+            <!-- <FermAct>CLOVER</FermAct> -->
+            <Mass>0.4479</Mass>
+            <clovCoeff>1.1609202226</clovCoeff>
+            <FermState>
+              <Name>STOUT_FERM_STATE</Name>
+              <rho>0.125</rho>
+              <n_smear>1</n_smear>
+              <orthog_dir>-1</orthog_dir>
+              <FermionBC>
+                <FermBC>SIMPLE_FERMBC</FermBC>
+                <boundary>1 1 1 -1</boundary>
+              </FermionBC>
+            </FermState>
+          </FermionAction>
+
+          <InvertParam>
+            <invType>QUDA_CLOVER_INVERTER</invType>
+            <CloverParams>
+              <Mass>0.4479</Mass>
+              <clovCoeff>1.1609202226</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+            </CloverParams>
+            <RsdTarget>1.0e-7</RsdTarget>
+            <Delta>1.0e-1</Delta>
+            <!--Pipeline>4</Pipeline-->
+            <Pipeline>0</Pipeline>
+            <MaxIter>1000</MaxIter>
+            <SolverType>BICGSTAB</SolverType>
+            <!--SolverType>GCR</SolverType-->
+            <NKrylov>12</NKrylov>
+            <InvTypePrecondition>CA_GCR</InvTypePrecondition>
+            <PrecPrecondition>HALF</PrecPrecondition>
+            <MaxIterPrecondition>20</MaxIterPrecondition>
+            <RsdToleranceFactor>100.0</RsdToleranceFactor>
+            <AntiPeriodicT>true</AntiPeriodicT>
+            <Verbose>false</Verbose>
+            <AsymmetricLinop>false</AsymmetricLinop>
+            <CudaReconstruct>RECONS_12</CudaReconstruct>
+            <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+            <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+            <AxialGaugeFix>false</AxialGaugeFix>
+            <AutotuneDslash>true</AutotuneDslash>
+            <SolutionCheckP>true</SolutionCheckP>
+            <!--SubspaceID>subspace_2416</SubspaceID>
+            <ThresholdCount>500</ThresholdCount-->
+          </InvertParam>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+          <source_id>pt_src2</source_id>
+          <prop_id>prop_pt_src2</prop_id>
+        </NamedObject>
+      </elem>
+
+      <elem>
+        <Name>WRITE_PART_PROP</Name>
+        <Frequency>1</Frequency>
+        <sink_coord>2	13	3	34</sink_coord>
+        <gamma_id>1 2 4 8 15</gamma_id>
+        <file_name>./data/SpinColorMatrix_sink.dat</file_name>
+        <NamedObject>
+          <prop_id>prop_pt_src2</prop_id>
+        </NamedObject>
+      </elem>
 
     </InlineMeasurements>
     <nrow>24 24 24 72</nrow>

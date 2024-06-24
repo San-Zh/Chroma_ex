@@ -108,47 +108,54 @@ namespace Chroma
         // LatticeComplex    lattCorr = trace(Gamma(params.gamma_id) * lattProp);
 
         int linearIdx = Layout::linearSiteIndex(params.sink_coord);
-        QDPIO::cout << InlineWritePartPropEnv::name << ": sink_coord      = " << params.sink_coord[0] << " " << params.sink_coord[1] << " "
-                    << params.sink_coord[2] << " " << params.sink_coord[3] << std::endl;
-        QDPIO::cout << InlineWritePartPropEnv::name << ": linearSiteIndex = " << linearIdx << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": sink_coord      = ";
+        for (int i = 0; i < Nd; i++) { QDPIO::cout << params.sink_coord[i] << " "; }
+        QDPIO::cout << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": linearSiteIndex = " << linearIdx << "  (local)" << std::endl;
+        QDPIO::cout << InlineWritePartPropEnv::name << ": nodeNumber      = " << Layout::nodeNumber(params.sink_coord) << std::endl;
 
-        if (Layout::primaryNode()) {
+        if (Layout::nodeNumber() == Layout::nodeNumber(params.sink_coord)) {
             auto &Msc   = lattProp.elem(linearIdx);
             auto *p_Msc = &Msc.elem(0, 0).elem(0, 0).real();
             // auto *p_Msc = &lattProp.elem(linearIdx).elem(0, 0).elem(0, 0).real(); ///< REAL for QDPXX, QDP::Word<REAL> for QDP-JITs
 
 #ifdef WRITE_DEBUG
-            QDPIO::cout << "(SpinColorMatrix) Msc:" << std::endl;
+            std::cout << "(SpinColorMatrix) Msc:" << std::endl;
             for (int s0 = 0; s0 < Ns; s0++) {
                 for (int s1 = 0; s1 < Ns; s1++) {
-                    QDPIO::cout << " (ColorMatrix) Msc.elem(" << s0 << "," << s1 << ") =" << std::endl;
+                    std::cout << " (ColorMatrix) Msc.elem(" << s0 << "," << s1 << ") =" << std::endl;
                     for (int c0 = 0; c0 < Nc; c0++) {
-                        for (int c1 = 0; c1 < Nc; c1++) { QDPIO::cout << "  " << Msc.elem(s0, s1).elem(c0, c1); };
-                        QDPIO::cout << std::endl;
+                        for (int c1 = 0; c1 < Nc; c1++) { std::cout << "  " << Msc.elem(s0, s1).elem(c0, c1); };
+                        std::cout << std::endl;
                     }
-                    QDPIO::cout << std::endl;
+                    std::cout << std::endl;
                 }
             }
-            QDPIO::cout << std::endl;
+            std::cout << std::endl;
 #endif
-            FILE *fp = fopen(params.file_name.c_str(), "w");
-            fwrite(p_Msc, sizeof(REAL), Ns * Nc * Ns * Nc * 2, fp);
-            fclose(fp);
-            fp = NULL;
-            QDPIO::cout << InlineWritePartPropEnv::name << ": write to file " << params.file_name << std::endl;
+            if (!params.file_name.empty()) {
+                FILE *fp = fopen(params.file_name.c_str(), "w");
+                fwrite(p_Msc, sizeof(REAL), Ns * Nc * Ns * Nc * 2, fp);
+                fclose(fp);
+                fp = NULL;
+                std::cout << InlineWritePartPropEnv::name << ": write to file " << params.file_name << std::endl;
+            }
 
             auto CorrUNIT = trace(Msc);
-            QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Msc) = " << CorrUNIT << std::endl;
+            std::cout << InlineWritePartPropEnv::name << ": trace(Msc) = " << CorrUNIT << std::endl;
+
             if (params.gamma_id.size() > 0) {
+                std::cout << InlineWritePartPropEnv::name << ": trace(Gamma * Msc) for gamma_id = ";
+                for (int i = 0; i < params.gamma_id.size(); i++) { std::cout << params.gamma_id[i] << " "; }
+                std::cout << std::endl;
+
                 multi1d<decltype(CorrUNIT)> Corr;
                 Corr.resize(params.gamma_id.size());
                 for (int i = 0; i < Corr.size(); i++) { Corr[i] = trace(Gamma(params.gamma_id[i]) * Msc); }
-                QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Gamma * Msc) for gamma_id = ";
-                for (int i = 0; i < params.gamma_id.size(); i++) { QDPIO::cout << params.gamma_id[i] << " "; }
-                QDPIO::cout << std::endl;
-                QDPIO::cout << InlineWritePartPropEnv::name << ": traceValues = ";
-                for (int i = 0; i < Corr.size(); i++) { QDPIO::cout << Corr[i] << " "; }
-                QDPIO::cout << std::endl;
+
+                std::cout << InlineWritePartPropEnv::name << ": traceValues = ";
+                for (int i = 0; i < Corr.size(); i++) { std::cout << Corr[i] << " "; }
+                std::cout << std::endl;
             } else {
             }
         }
