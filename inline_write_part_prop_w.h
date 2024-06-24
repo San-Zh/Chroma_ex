@@ -28,7 +28,7 @@ namespace Chroma
         void writeXML(XMLWriter &xml_out, const std::string &path);
 
         unsigned long frequency;
-        std::string   filename;
+        std::string   file_name;
         // std::string   SourceType;
         // multi1d<int>  srce_coord;
         multi1d<int> sink_coord;

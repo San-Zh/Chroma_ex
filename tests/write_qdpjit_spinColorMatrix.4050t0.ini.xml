@@ -43,6 +43,7 @@
           <obsvP>true</obsvP>
           <numRetries>1</numRetries>
           <FermionAction>
+            <!-- <FermAct>SEOPREC_CLOVER</FermAct> -->
             <FermAct>CLOVER</FermAct>
             <Mass>0.4479</Mass>
             <clovCoeff>1.1609202226</clovCoeff>
@@ -60,7 +61,7 @@
 
           <InvertParam>
             <invType>BICGSTAB_INVERTER</invType>
-            <RsdBiCGStab>1.0e-10</RsdBiCGStab>
+            <RsdBiCGStab>1.0e-14</RsdBiCGStab>
             <MaxBiCGStab>500</MaxBiCGStab>
           </InvertParam>
         </Param>
@@ -91,10 +92,9 @@
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
-        <SourceType>POINT_SOURCE</SourceType>
         <sink_coord>6 3 8 2</sink_coord>
         <gamma_id>0 1 2 3 4 5</gamma_id>
-        <filename>./data/SpinColorMatrix_sink_6_3_8_2.dat</filename>
+        <file_name>./data/SpinColorMatrix_sink_6_3_8_2.dat</file_name>
         <NamedObject>
           <prop_id>prop_pt_src</prop_id>
         </NamedObject>
@@ -103,8 +103,8 @@
       <elem>
         <Name>WRITE_PART_PROP</Name>
         <Frequency>1</Frequency>
-        <sink_coord>12 6 7 0</sink_coord>
-        <filename>./data/SpinColorMatrix_sink_12_6_7_0.dat</filename>
+        <sink_coord>4 6 7 0</sink_coord>
+        <file_name>./data/SpinColorMatrix_sink_4_6_7_0.dat</file_name>
         <NamedObject>
           <prop_id>prop_pt_src</prop_id>
         </NamedObject>
@@ -113,6 +113,7 @@
 
     </InlineMeasurements>
     <nrow>24 24 24 72</nrow>
+    <!-- <nrow>8 8 8 8</nrow> -->
   </Param>
 
   <RNG>
@@ -127,6 +128,8 @@
   <Cfg>
     <cfg_type>SCIDAC</cfg_type>
     <cfg_file>/public/home/mengyu/configuration/beta6.20_mu-0.2770_ms-0.2400_L24x72/beta6.20_mu-0.2770_ms-0.2400_L24x72_cfg_4050.lime</cfg_file>
+    <!-- <cfg_file>dummy</cfg_file>
+    <cfg_type>WEAK_FIELD</cfg_type> -->
   </Cfg>
 
 </chroma>

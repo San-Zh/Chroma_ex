@@ -63,7 +63,7 @@ namespace Chroma
                 gamma_id.resize(0);
             }
 
-            read(paramtop, "filename", filename);
+            read(paramtop, "file_name", file_name);
             read(paramtop, "sink_coord", sink_coord);
             read(paramtop, "NamedObject", named_obj);
 
@@ -78,7 +78,7 @@ namespace Chroma
     void InlineWritePartPropParams::writeXML(XMLWriter &xml_out, const std::string &path) {
         push(xml_out, path);
         if (gamma_id.size() > 0) { write(xml_out, "gamma_id", gamma_id); }
-        write(xml_out, "filename", filename);
+        write(xml_out, "file_name", file_name);
         write(xml_out, "sink_coord", sink_coord);
         write(xml_out, "NamedObject", named_obj);
         pop(xml_out);
@@ -131,11 +131,11 @@ namespace Chroma
             }
             QDPIO::cout << std::endl;
 #endif
-            FILE *fp = fopen(params.filename.c_str(), "w");
+            FILE *fp = fopen(params.file_name.c_str(), "w");
             fwrite(p_Msc, sizeof(REAL), Ns * Nc * Ns * Nc * 2, fp);
             fclose(fp);
             fp = NULL;
-            QDPIO::cout << InlineWritePartPropEnv::name << ": write to file " << params.filename << std::endl;
+            QDPIO::cout << InlineWritePartPropEnv::name << ": write to file " << params.file_name << std::endl;
 
             auto CorrUNIT = trace(Msc);
             QDPIO::cout << InlineWritePartPropEnv::name << ": trace(Msc) = " << CorrUNIT << std::endl;
